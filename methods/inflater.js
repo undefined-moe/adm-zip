@@ -2,12 +2,12 @@ module.exports = function (/*Buffer*/ inbuf) {
     var zlib = require("zlib");
 
     return {
-        inflate: function () {
-            return zlib.inflateRawSync(inbuf);
+        inflate: function (expectedLength) {
+            return zlib.inflateRawSync(inbuf, { maxOutputLength: expectedLength });
         },
 
-        inflateAsync: function (/*Function*/ callback) {
-            var tmp = zlib.createInflateRaw(),
+        inflateAsync: function (/*Function*/ callback, expectedLength) {
+            var tmp = zlib.createInflateRaw({ maxOutputLength: expectedLength }),
                 parts = [],
                 total = 0;
             tmp.on("data", function (data) {

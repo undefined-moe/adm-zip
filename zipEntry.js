@@ -76,7 +76,7 @@ module.exports = function (/*Buffer*/ input) {
             case Utils.Constants.DEFLATED:
                 var inflater = new Methods.Inflater(compressedData);
                 if (!async) {
-                    const result = inflater.inflate(data);
+                    const result = inflater.inflate(_entryHeader.size);
                     result.copy(data, 0);
                     if (!crc32OK(data)) {
                         throw new Error(Utils.Errors.BAD_CRC + " " + _entryName.toString());
@@ -92,7 +92,7 @@ module.exports = function (/*Buffer*/ input) {
                                 callback(result);
                             }
                         }
-                    });
+                    }, _entryHeader.size);
                 }
                 break;
             default:
